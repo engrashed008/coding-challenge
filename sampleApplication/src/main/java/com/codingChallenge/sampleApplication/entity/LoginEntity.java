@@ -10,6 +10,7 @@ public class LoginEntity {
     private String name;
     private String email;
     private String password;
+    private String token;
     private Boolean active;
     private Integer previlige;
     private LocalDateTime created_at;

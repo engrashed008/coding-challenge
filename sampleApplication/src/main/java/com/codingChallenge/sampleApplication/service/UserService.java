@@ -1,13 +1,22 @@
 package com.codingChallenge.sampleApplication.service;
 
+import com.codingChallenge.sampleApplication.common.Const;
+import com.codingChallenge.sampleApplication.dto.UserCreateRequestDto;
 import com.codingChallenge.sampleApplication.dto.UserInfoDto;
 import com.codingChallenge.sampleApplication.enums.ErrorStatus;
 import com.codingChallenge.sampleApplication.exception.ServiceException;
 import com.codingChallenge.sampleApplication.mapper.UserMapper;
+import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.util.StringUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +25,11 @@ import java.util.List;
 public class UserService {
     private final UserMapper userMapper;
 
+    /**
+     * @param page
+     * @param limit
+     * @return
+     */
     public List<UserInfoDto> getUserList(int page, int limit) {
         PageHelper.startPage(page, limit);
         // Following Mapper call fetch the usr list from DB
@@ -26,9 +40,7 @@ public class UserService {
             throw new ServiceException(ErrorStatus.DATA_NOT_FOUND);
         }
         return userList;
-
     }
-
 
     private List<UserInfoDto> getUserSampleList() {
         List<UserInfoDto> list = new ArrayList<>();
@@ -80,6 +92,129 @@ public class UserService {
         usr6.setAvatar("https://s3.amazonaws.com/uifaces/faces/twitter/hebertialmeida/128.jpg");
         list.add(usr6);
 
+        UserInfoDto usr7 = new UserInfoDto();
+        usr7.setId(13L);
+        usr7.setEmail("test.howell@reqres.in");
+        usr7.setFirst_name("test");
+        usr7.setLast_name("Howell");
+        usr7.setAvatar("https://s3.amazonaws.com/uifaces/faces/twitter/hebertialmeida/128.jpg");
+        list.add(usr7);
+
         return list;
     }
+
+    /**
+     * @param id
+     * @return
+     */
+    public UserInfoDto getSingle(long id) {
+        // Following Mapper call fetch the usr list from DB
+        //List<UserInfoDto> userList = userMapper.getSingleUser(long id);
+        // Sample output
+        UserInfoDto singleUsr = singleUser(id);
+        return singleUsr;
+    }
+
+    private UserInfoDto singleUser(Long id) {
+        UserInfoDto usr = new UserInfoDto();
+        usr.setId(id);
+        usr.setEmail("janet.weaver@reqres.in");
+        usr.setFirst_name("Janet");
+        usr.setLast_name("Weaver");
+        usr.setAvatar("https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg");
+        return usr;
+    }
+
+    /**
+     *
+     * @param param
+     * @return
+     */
+    @Transactional
+    public UserInfoDto create(UserCreateRequestDto param) {
+        String[] name = StringUtils.split(param.getName(), Const.SPACE);
+        // The following code should be modified based on spec.
+        UserInfoDto usr = new UserInfoDto();
+        if(name == null){
+            usr.setFirst_name(param.getName());
+            usr.setLast_name(null);
+        } else {
+            usr.setFirst_name(name[0]);
+            usr.setLast_name(name.length > 1 ? name[1] : null);
+        }
+        usr.setJob(param.getJob());
+        usr.setCreatedAt(LocalDateTime.now());
+
+        // Follwing code will update user with given Id
+        //userMapper.createUser(usr);
+        //UserInfoDto createdUsr = userMapper.fetchByNameAndJob(usr.getFirst_name(),  usr.getLast_name(), usr.getJob());
+
+        // Sample code for output. UI only display necessary information
+        UserInfoDto createdUsr = newCreatedSampleUser();
+        if (createdUsr == null) {
+            throw new ServiceException(ErrorStatus.USER_CREATE_ERROR);
+        }
+        return createdUsr;
+    }
+
+    private UserInfoDto newCreatedSampleUser() {
+        UserInfoDto newUsr = new UserInfoDto();
+        newUsr.setId(308L);
+        newUsr.setName("morpheus");
+        newUsr.setJob("leader");
+        newUsr.setCreatedAt(LocalDateTime.parse("2020-03-01 06:05:13", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        return newUsr;
+    }
+
+
+    /**
+     *
+     * @param param
+     * @return
+     */
+    @Transactional
+    public UserInfoDto update(UserCreateRequestDto param, long id) {
+        String[] name = StringUtils.split(param.getName(), Const.SPACE);
+        // The following code should be modified based on spec.
+        UserInfoDto usr = new UserInfoDto();
+        usr.setId(id);
+        if(name == null){
+            usr.setFirst_name(param.getName());
+            usr.setLast_name(null);
+        } else {
+            usr.setFirst_name(name[0]);
+            usr.setLast_name(name.length > 1 ? name[1] : null);
+        }
+        usr.setJob(param.getJob());
+        usr.setCreatedAt(LocalDateTime.now());
+
+        // Follwing code will insert user and retrieve newly inserted user
+        // userMapper.updateUser(param);
+        // UserInfoDto createdUsr = userMapper.fetchByNameAndJob(String usr.getFirst_name(), String getLast_name(), String usr.getJob());
+
+        // Sample code for output. UI only display necessary information
+        UserInfoDto updateUsr = updateSampleUser();
+        if (updateUsr == null) {
+            throw new ServiceException(ErrorStatus.USER_UPDATE_ERROR);
+        }
+        return updateUsr;
+    }
+
+    private UserInfoDto updateSampleUser() {
+        UserInfoDto updateUsr = new UserInfoDto();
+        updateUsr.setName("morpheus");
+        updateUsr.setJob("zion resident");
+        updateUsr.setUpdatedAt(LocalDateTime.parse("2020-03-01 06:05:13", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        return updateUsr;
+    }
+
+    @Transactional
+    public void delete(long id){
+        int count=0;
+        // count = userMapper.deleteUser(id);
+        if(count == 0){
+            throw new ServiceException(ErrorStatus.USER_DELETE_ERROR);
+        }
+    }
+
 }

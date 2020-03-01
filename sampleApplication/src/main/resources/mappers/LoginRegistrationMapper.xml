@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingChallenge.sampleApplication.mapper.LoginRegistrationMapper">
+    <insert id="register" parameterType="com.codingChallenge.sampleApplication.dto.RegLoginRequestDto">
+       INSERT INTO LOGIN
+        email, password, token
+        values(#{email}, #{password},#{token})
+    </insert>
+
+    <select id="findByEmail" resultType="com.codingChallenge.sampleApplication.dto.RegistrationDto">
+        SELECT
+        id,token
+        FROM login
+        WHERE email = #{email}
+    </select>
+
+</mapper>

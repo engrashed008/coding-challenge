@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingChallenge.sampleApplication.mapper.ProductMapper">
+    <select id="getProductList" resultType="com.codingChallenge.sampleApplication.dto.ProductDto">
+        SELECT
+            id,name,year,color, pantone_value
+        FROM product
+    </select>
+
+    <select id="getSingleUser" resultType="com.codingChallenge.sampleApplication.dto.UserInfoDto">
+        SELECT
+        id,name,year,color, pantone_value
+        FROM product
+        WHERE id = #{id}
+    </select>
+
+</mapper>

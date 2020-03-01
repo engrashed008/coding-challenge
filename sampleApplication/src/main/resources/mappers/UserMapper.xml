@@ -3,8 +3,42 @@
 <mapper namespace="com.codingChallenge.sampleApplication.mapper.UserMapper">
     <select id="getList" resultType="com.codingChallenge.sampleApplication.dto.UserInfoDto">
         SELECT
-            id,email,first_name,last_name,avatar
+        id,job,email,first_name,last_name,avatar
         FROM user
     </select>
 
+    <select id="getSingleUser" resultType="com.codingChallenge.sampleApplication.dto.UserInfoDto">
+        SELECT
+        id,job,email,first_name,last_name,avatar
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <insert id="createUser" parameterType="com.codingChallenge.sampleApplication.dto.UserInfoDto">
+        INSERT INTO
+        first_name,
+        last_name,
+        job,
+        created_at
+        values (#{first_name}, #{last_name},#{job},#{created_at})
+    </insert>
+
+    <update id="update" parameterType="com.codingChallenge.sampleApplication.dto.UserInfoDto">
+        UPDATE user
+        SET first_name= #{first_name}, last_name = #{last_name}, updated_at= #{updatedAt}, job = #{job}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE
+        FROM user
+        WHere id = #{id}
+    </delete>
+
+    <select id="fetchByNameAndJob" resultType="com.codingChallenge.sampleApplication.dto.UserInfoDto">
+        SELECT
+        id,job,email,first_name,last_name,avatar
+        FROM user
+        WHERE first_name=#{firstName} AND last_name=#{lastName} AND job=#{job}
+    </select>
 </mapper>

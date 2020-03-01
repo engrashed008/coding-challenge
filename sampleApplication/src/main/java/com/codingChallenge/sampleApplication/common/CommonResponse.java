@@ -12,14 +12,14 @@ public class CommonResponse<T> {
     private long code;
     private String[] messages;
     private List errItems;
-    private T result;
+    private T data;
 
     protected CommonResponse(long code, String message, T data) {
         this.code = code;
         if (messages == null) {
             messages = new String[]{message};
         }
-        result = data;
+        this.data = data;
     }
 
     protected CommonResponse(long code, String[] messages, List errItems) {
