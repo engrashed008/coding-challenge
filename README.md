@@ -37,11 +37,6 @@ PageHelper is integrated with mybatis. So, sample output could not work with pag
 ## Questions
 For any kind of queries please feel free to share me. 
 
-## Not Completed
-Sorry, test cases are not written due to time constraints.
-
-
-Hope sample project may satisfy the reviewers 
 Thanks !
 
 
